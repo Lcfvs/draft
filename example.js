@@ -54,7 +54,7 @@ const start = async () => {
     body.append(node)
   }, 400)
   
-  return store(node)
+  return count(node)
 }
 
 queueMicrotask(start)
