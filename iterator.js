@@ -31,17 +31,17 @@ const generate = async function* (
   const observer = observe(document, target, options)
   const observed = generators.get(observer)
   const promises = []
-  const next = value => resolve([promises], value)
+  const resolver = [promises]
   const matches = current => current === node
 
   contexts.delete(context)
   observed.add(generator)
   mappers.set(generator, mapper)
-  resolvers.set(generator, next)
+  resolvers.set(generator, resolver)
   matchers.set(generator, matches)
   targets.set(generator, target)
   observer.observe(target, options)
-  next()
+  resolve(resolver)
 
   try {
     while (true) {
@@ -90,7 +90,7 @@ const callback = (
   for (const generator of generators.get(observer)) {
     const mapper = mappers.get(generator)
     const matches = matchers.get(generator)
-    const next = resolvers.get(generator)
+    const resolver = resolvers.get(generator)
     const target = targets.get(generator)
     const filtered = []
 
@@ -100,7 +100,9 @@ const callback = (
       }
     }
 
-    mapper(filtered, matches, next)
+    for (const state of mapper(filtered, matches)) {
+      resolve(resolver, state)
+    }
   }
 }
 
