@@ -1,21 +1,21 @@
 import { moves } from './moves.js'
 
-const contexts = new WeakMap()
+const counters = new WeakMap()
 
-const store = async (
-  node,
-  context
+const count = async (
+  node
 ) => {
   // skip, if already active
-  if (contexts.has(node)) {
+  if (counters.has(node)) {
     return
   }
 
-  contexts.set(node, context)
+  counters.set(node, 0)
 
   for await (const moved of moves(node)) {
     // continues, if the node is still into the document
     if (moved) {
+      counters.set(node, counters.get(node) + 1)
       continue
     }
 
@@ -24,38 +24,37 @@ const store = async (
   }
 
   // cleaning immediately!
-  contexts.delete(node)
+  counters.delete(node)
 }
 
 const start = async () => {
-  const slot = document.createElement('slot')
+  const { body } = document
+  const node = document.createElement('slot')
 
-  document.body.append(slot)
+  body.append(node)
 
   setTimeout(() => {
-    console.log('append', contexts.get(slot))
-    document.body.append(slot)
+    console.log('append', counters.get(node))
+    body.append(node)
   }, 100)
 
   setTimeout(() => {
-    console.log('remove & append', contexts.get(slot))
-    slot.remove()
-    document.body.append(slot)
+    console.log('remove & append', counters.get(node))
+    node.remove()
+    body.append(node)
   }, 200)
 
   setTimeout(() => {
-    console.log('remove', contexts.get(slot))
-    slot.remove()
+    console.log('remove', counters.get(node))
+    node.remove()
   }, 300)
 
   setTimeout(() => {
-    console.log('append but already stopped', contexts.get(slot))
-    document.body.append(slot)
+    console.log('append but already stopped', counters.get(node))
+    body.append(node)
   }, 400)
   
-  await store(slot, {
-    value: 123
-  })
+  return store(node)
 }
 
 queueMicrotask(start)
