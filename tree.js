@@ -24,11 +24,11 @@ const set = (
   }
 }
 
-const mapper = (
+const mapper = function* (
   records,
   matches,
   next
-) => {
+) {
   const states = new Map()
 
   for (const { addedNodes, removedNodes } of records) {
@@ -36,7 +36,5 @@ const mapper = (
     set(states, true, addedNodes, matches)
   }
 
-  for (const [, state] of states) {
-    next(state)
-  }
+  yield* states.values()
 }
