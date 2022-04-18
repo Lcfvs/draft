@@ -1,4 +1,4 @@
-import { iterator } from './iterator.js'
+import { mutations } from './mutations.js'
 
 export const moves = (
   node,
@@ -8,7 +8,7 @@ export const moves = (
     subtree = true
   } = {}
 ) => {
-  return iterator(node, target, mapper, { childList, subtree })
+  return mutations(node, target, mapper, { childList, subtree })
 }
 
 const set = (
