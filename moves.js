@@ -1,6 +1,6 @@
 import { iterator } from './iterator.js'
 
-export const tree = (
+export const moves = (
   node,
   target = node.ownerDocument,
   {
