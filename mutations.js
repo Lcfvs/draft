@@ -7,7 +7,7 @@ const matchers = new WeakMap()
 const targets = new WeakMap()
 let picked
 
-export const iterator = (
+export const mutations = (
   node,
   target,
   mapper,
