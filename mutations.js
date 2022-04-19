@@ -38,12 +38,7 @@ export const mutations = async function* (
 }
 
 export const log = () => {
-  console.log({
-    mappers,
-    matchers,
-    observers,
-    resolvers
-  })
+  console.log({ mappers, matchers, observers, resolvers })
 }
 
 const callback = (
