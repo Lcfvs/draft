@@ -3,9 +3,26 @@ import { log } from './mutations.js'
 
 const counters = new WeakMap()
 
-const count = async (
-  node
-) => {
+const wait = async delay =>
+  new Promise(resolve => setTimeout(resolve, delay))
+
+const tasks = Object.entries({
+  'append': (node, body) => {
+    body.append(node)
+  },
+  'remove & append': (node, body) => {
+    node.remove()
+    body.append(node)
+  },
+  'remove': (node) => {
+    node.remove()
+  },
+  'append but already stopped': (node, body) => {
+    body.append(node)
+  }
+})
+
+const count = async node => {
   // skip, if already active
   if (counters.has(node)) {
     return
@@ -37,27 +54,12 @@ const start = async () => {
   const node = document.createElement('slot')
 
   body.append(node)
-
-  setTimeout(() => {
-    console.log('append')
-    body.append(node)
-  }, 100)
-
-  setTimeout(() => {
-    console.log('remove & append')
-    node.remove()
-    body.append(node)
-  }, 200)
-
-  setTimeout(() => {
-    console.log('remove')
-    node.remove()
-  }, 300)
-
-  setTimeout(() => {
-    console.log('append but already stopped')
-    body.append(node)
-  }, 400)
+  
+  for (const [message, task] of tasks) {
+    console.log(message)
+    task(node, body)
+    await wait(100)
+  }
   
   await count(node)
   console.log({ counters })
