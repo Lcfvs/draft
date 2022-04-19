@@ -1,9 +1,9 @@
 const contexts = new WeakMap()
 const generators = new WeakMap()
 const mappers = new WeakMap()
+const matchers = new WeakMap()
 const observers = new WeakMap()
 const resolvers = new WeakMap()
-const matchers = new WeakMap()
 const targets = new WeakMap()
 let picked
 
@@ -21,6 +21,17 @@ export const mutations = (
   return generator
 }
 
+export const log = () => {
+  console.log({
+    generators,
+    mappers,
+    matchers,
+    observers,
+    resolvers,
+    targets
+  })
+}
+
 const generate = async function* (
   context
 ) {
@@ -28,18 +39,18 @@ const generate = async function* (
   const { mapper, node, options, target } = context
   const { ownerDocument } = target
   const document = ownerDocument ?? target
+  const matches = current => current === node
   const observer = observe(document, target, options)
   const observed = generators.get(observer)
   const promises = []
   const resolver = [promises]
-  const matches = current => current === node
 
   contexts.delete(context)
-  observed.add(generator)
   mappers.set(generator, mapper)
-  resolvers.set(generator, resolver)
   matchers.set(generator, matches)
+  resolvers.set(generator, resolver)
   targets.set(generator, target)
+  observed.add(generator)
   observer.observe(target, options)
   resolve(resolver)
 
@@ -49,8 +60,8 @@ const generate = async function* (
     }
   } finally {
     mappers.delete(generator)
-    resolvers.delete(generator)
     matchers.delete(generator)
+    resolvers.delete(generator)
     targets.delete(target)
     observed.delete(generator)
 
