@@ -28,7 +28,7 @@ const update = (
   states,
   value,
   nodes,
-  matches,
+  matches
 ) => {
   for (const current of nodes) {
     if (matches(current)) {
