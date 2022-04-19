@@ -40,3 +40,5 @@ async* moves(node, target = node.ownerDocument, subtree = true)
 * `node`: the node to listen, into the target scope
 * `target`: the target to observe with the `MutationObserver`
 * `subtree`: the `mutationObserver.observe()` `subtree` option
+
+The possible iteration is a boolean, indicating if the node is current somewhere into the target
