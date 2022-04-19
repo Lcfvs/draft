@@ -1,6 +1,10 @@
 import { moves } from './moves.js'
 import { log } from './mutations.js'
 
+const { body } = document
+
+const node = document.createElement('slot')
+
 const counters = new WeakMap()
 
 const wait = async delay =>
@@ -42,28 +46,20 @@ const count = async node => {
     }
 
     // the node is removed
+    console.log('cleaning phase')
     break
   }
 
   // cleaning immediately!
   counters.delete(node)
-}
-
-const start = async () => {
-  const { body } = document
-  const node = document.createElement('slot')
-
-  body.append(node)
-  
-  for (const [message, task] of tasks) {
-    console.log(message)
-    task(node, body)
-    await wait(100)
-  }
-  
-  await count(node)
-  console.log({ counters })
   log()
 }
 
-queueMicrotask(start)
+body.append(node)
+queueMicrotask(async () => count(node))
+
+for (const [message, task] of tasks) {
+  await wait(100)
+  console.log(message)
+  task(node, body)
+}
