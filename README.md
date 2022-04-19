@@ -12,6 +12,7 @@ The idea is to be able
 * **SOON** to deal with the attributes mutations as iterations... doesn't it seem natural?
 * to easily make some other custom behaviors based on its `mutations()`
 
+[First minimal demo](https://lcfvs.github.io/draft/)
 
 ## API
 
