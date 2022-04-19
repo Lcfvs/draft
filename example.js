@@ -14,9 +14,13 @@ const count = async (
   counters.set(node, 0)
 
   for await (const moved of moves(node)) {
+    const counter = counters.get(node) + 1
+    
+    console.log({ counter })
+    
     // continues, if the node is still into the document
     if (moved) {
-      counters.set(node, counters.get(node) + 1)
+      counters.set(node, counter)
       continue
     }
 
@@ -35,27 +39,28 @@ const start = async () => {
   body.append(node)
 
   setTimeout(() => {
-    console.log('append', counters.get(node))
+    console.log('append')
     body.append(node)
   }, 100)
 
   setTimeout(() => {
-    console.log('remove & append', counters.get(node))
+    console.log('remove & append')
     node.remove()
     body.append(node)
   }, 200)
 
   setTimeout(() => {
-    console.log('remove', counters.get(node))
+    console.log('remove')
     node.remove()
   }, 300)
 
   setTimeout(() => {
-    console.log('append but already stopped', counters.get(node))
+    console.log('append but already stopped')
     body.append(node)
   }, 400)
   
   await count(node)
+  console.log({ counters })
   log()
 }
 
