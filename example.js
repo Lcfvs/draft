@@ -1,4 +1,5 @@
 import { moves } from './moves.js'
+import { log } from './mutations.js'
 
 const counters = new WeakMap()
 
@@ -54,7 +55,8 @@ const start = async () => {
     body.append(node)
   }, 400)
   
-  return count(node)
+  await count(node)
+  log()
 }
 
 queueMicrotask(start)
