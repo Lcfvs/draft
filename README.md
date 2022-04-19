@@ -27,6 +27,8 @@ async* mutations(node, target, mapper, options)
 * `target`: the target to observe with the `MutationObserver`
 * `mapper(records, matches)`: a function returning an iterable containing the values to iterate
   * `records`: an array of `MutationRecords`
+  * `matches(current)`: a function to test if a record node is the listened one
+    * `current`: the node to test
 * `options`: the `mutationObserver.observe()` options
 
 
