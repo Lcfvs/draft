@@ -11,7 +11,8 @@ export const moves = (
 }
 
 const mapper = function* (
-  records
+  records,
+  matches
 ) {
   const states = new Map()
 
@@ -26,9 +27,12 @@ const mapper = function* (
 const update = (
   states,
   value,
-  nodes
+  nodes,
+  matches,
 ) => {
   for (const current of nodes) {
-    states.set(current, value)
+    if (matches(current)) {
+      states.set(current, value)
+    }
   }
 }
