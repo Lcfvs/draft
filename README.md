@@ -18,8 +18,6 @@ The idea is to be able
 
 ### mutations
 
-The core function,
-
 ```js
 async* mutations(node, target, mapper, options)
 ```
