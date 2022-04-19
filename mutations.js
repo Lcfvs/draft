@@ -62,7 +62,7 @@ const generate = async function* (
     mappers.delete(generator)
     matchers.delete(generator)
     resolvers.delete(generator)
-    targets.delete(target)
+    targets.delete(generator)
     observed.delete(generator)
 
     if (!observed.size) {
