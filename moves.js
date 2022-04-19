@@ -1,17 +1,32 @@
 import { mutations } from './mutations.js'
 
+const childList = true
+
 export const moves = (
   node,
   target = node.ownerDocument,
   {
-    childList = true,
     subtree = true
   } = {}
 ) => {
   return mutations(node, target, mapper, { childList, subtree })
 }
 
-const set = (
+const mapper = function* (
+  records,
+  matches
+) {
+  const states = new Map()
+
+  for (const { addedNodes, removedNodes } of records) {
+    update(states, false, removedNodes, matches)
+    update(states, true, addedNodes, matches)
+  }
+
+  yield* states.values()
+}
+
+const update = (
   states,
   value,
   nodes,
@@ -22,19 +37,4 @@ const set = (
       states.set(current, value)
     }
   }
-}
-
-const mapper = function* (
-  records,
-  matches,
-  next
-) {
-  const states = new Map()
-
-  for (const { addedNodes, removedNodes } of records) {
-    set(states, false, removedNodes, matches)
-    set(states, true, addedNodes, matches)
-  }
-
-  yield* states.values()
 }
