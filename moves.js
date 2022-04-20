@@ -5,7 +5,9 @@ const childList = true
 export const moves = (
   node,
   target = node.ownerDocument,
-  subtree = true
+  {
+    subtree = true
+  } = {}
 ) => {
   return mutations(node, target, mapper, { childList, subtree })
 }
