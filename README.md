@@ -18,8 +18,17 @@ The idea is to be able
 
 ### mutations
 
+The core function
+
 ```js
-async* mutations(node, target, mapper, options)
+async* mutations(
+  node,
+  target,
+  mapper,
+  {
+    ...options
+  }
+)
 ```
 * `node`: the node to listen, into the target scope
 * `target`: the target to observe with the `MutationObserver`
@@ -33,10 +42,36 @@ async* mutations(node, target, mapper, options)
 ### moves
 
 ```js
-async* moves(node, target = node.ownerDocument, subtree = true)
+async* moves(
+  node,
+  target = node.ownerDocument,
+  {
+    subtree = true
+  } = {}
+)
 ```
 * `node`: the node to listen, into the target scope
 * `target`: the target to observe with the `MutationObserver`
 * `subtree`: the `mutationObserver.observe()` `subtree` option
 
-The possible iteration is a boolean, indicating if the node is current somewhere into the target
+The iteration value is a boolean, indicating if the node is current somewhere into the target
+
+### values
+
+```js
+async* values(
+  node,
+  target = node.ownerDocument,
+  {
+    attributeFilter = null,
+    attributeOldValue = true,
+    childList = true,
+    subtree = true
+  } = {}
+)
+```
+* `node`: the node to listen, into the target scope
+* `target`: the target to observe with the `MutationObserver`
+* `subtree`: the `mutationObserver.observe()` `subtree` option
+
+The iteration value is an array like `[attributeName, oldValue]`
